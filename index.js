@@ -1,6 +1,10 @@
 "use strict"; //厳格モード(おまじない)
 //パッケージをロードする
 require('date-utils')//Date(日時)を便利にするやつ
+
+if (process.env.NODE_ENV !== 'production') {
+    require('dotenv').config();
+}
 //discord.jsをインポート
 const { Client, GatewayIntentBits } = require('discord.js'); //discordjsから必要なのをrequire
 const { Events } = require('discord.js');//イベント一覧
@@ -16,8 +20,7 @@ const client = new Client({ //インテントを設定してクライアント�
 });
 
 //BOTトークンを変数tokenに読み込み
-const { token } = require('./config.json');
-
+const { token } = {token: process.env.DISCORD_BOT_TOKEN}
 //デバッグ用に情報書き出し
 console.log("-------start up-------");
 //今の時間をフォーマットしてstartup_timeに入れる
@@ -38,7 +41,7 @@ client.on('ready', async () => {
 
 
 const configuration = new Configuration({
-  apiKey: "xxxxxxxxxxxx",
+  apiKey: process.env.OPENAI_TOKEN,
 });
 const openai = new OpenAIApi(configuration);
 
