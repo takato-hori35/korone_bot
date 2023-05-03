@@ -1,0 +1,15 @@
+{
+  "name": "zen_discordjs",
+  "version": "1.0.0",
+  "description": "discord.js test",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "date-utils": "^1.2.21",
+    "discord.js": "^14.10.2"
+  }
+}
