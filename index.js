@@ -2,8 +2,9 @@
 //パッケージをロードする
 require('date-utils')//Date(日時)を便利にするやつ
 //discord.jsをインポート
-const { Client, GatewayIntentBits } = require('discord.js');//discordjsから必要なのをrequire
+const { Client, GatewayIntentBits } = require('discord.js'); //discordjsから必要なのをrequire
 const { Events } = require('discord.js');//イベント一覧
+const { Configuration, OpenAIApi } = require("openai");
 
 const client = new Client({ //インテントを設定してクライアントを定義する
 	intents: [
@@ -36,12 +37,27 @@ client.on('ready', async () => {
 });
 
 
+const configuration = new Configuration({
+  apiKey: "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",
+});
+const openai = new OpenAIApi(configuration);
+
 //MessageCreateEvent処理(サーバーにメッセージが送信された時の処理)
 client.on(Events.MessageCreate, async message => { //messageに作られたmessageとかいろいろ入る
     if (message.author.bot) {//メッセージの送信者がBOTなら
         return;//returnしてこの先の処理をさせない。
     }
-    if (message.content.startsWith("おはよ")) { //message.content(メッセージの内容)が「おはよ」で始まっていたら
-        await message.channel.send("おはよ"); //botがmessage.channel(メッセージが送信されたチャンネル)に「おはよ」と送信する
+    try {
+        const completion = await openai.createChatCompletion({
+            model: "gpt-3.5-turbo",
+            messages: [{role: "user", content: `${message.content}\n `}],
+            n: 3,
+        });
+        console.log(completion.data.choices[0].message);
+
+        // 取得した回答を返す
+        await message.channel.send(completion.data.choices[0].message);
+    } catch (error) {
+        console.error("Error:", error);
     }
 });
