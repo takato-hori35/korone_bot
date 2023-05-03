@@ -38,7 +38,7 @@ client.on('ready', async () => {
 
 
 const configuration = new Configuration({
-  apiKey: "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",
+  apiKey: "xxxxxxxxxxxx",
 });
 const openai = new OpenAIApi(configuration);
 
