@@ -47,17 +47,20 @@ const openai = new OpenAIApi(configuration);
 
 //MessageCreateEvent処理(サーバーにメッセージが送信された時の処理)
 client.on(Events.MessageCreate, async message => { //messageに作られたmessageとかいろいろ入る
+    if (message.channel.id != process.env.CHANNEL_ID) {
+        return;
+    }
     if (message.author.bot) {//メッセージの送信者がBOTなら
         return;//returnしてこの先の処理をさせない。
     }
     try {
         const completion = await openai.createChatCompletion({
             model: "gpt-3.5-turbo",
-            messages: [{role: "user", content: `${message.content}\n `}],
+            messages: [{role: "user", content: `${process.env.PROMPT}
+            上記を守って以下の質問に応えてください。
+            ${message.content} `}],
             n: 3,
         });
-        console.log(completion.data.choices[0].message);
-
         // 取得した回答を返す
         await message.channel.send(completion.data.choices[0].message);
     } catch (error) {
