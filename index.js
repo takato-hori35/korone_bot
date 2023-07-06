@@ -55,7 +55,7 @@ client.on(Events.MessageCreate, async message => { //messageに作られたmessa
     }
     try {
         const completion = await openai.createChatCompletion({
-            model: "gpt-3.5-turbo",
+            model: "gpt-4",
             messages: [{role: "user", content: `${process.env.PROMPT}
             上記を守って以下の質問に応えてください。
             ${message.content} `}],
